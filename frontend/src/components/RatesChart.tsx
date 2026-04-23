@@ -92,11 +92,8 @@ export function RatesChart({ currencies }: RatesChartProps) {
 
   useEffect(() => { load(base, quote, period); }, [base, quote, period, load]);
 
-  const latest    = data.at(-1)?.rate ?? 0;
-  const first     = data.at(0)?.rate  ?? 0;
-  const changePct = first !== 0 ? ((latest - first) / first) * 100 : 0;
-  const isUp      = changePct >= 0;
-
+  const latest = data.at(-1)?.rate ?? 0;
+  
   // Tick interval so the X-axis never looks crowded.
   const tickEvery = Math.max(1, Math.floor(data.length / 6));
 
