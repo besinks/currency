@@ -107,7 +107,7 @@ export function MultipleConverter({ currencies }: { currencies: Currency[] }) {
                 <div className="relative">
                   <Input
                     readOnly
-                    className="font-mono bg-muted"
+                    className="font-mono bg-muted font-bold"
                     value={
                       row.loading
                         ? ""
