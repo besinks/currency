@@ -80,7 +80,7 @@ export function MultipleConverter({ currencies }: { currencies: Currency[] }) {
           </p>
         ) : (
           <div className="space-y-3">
-            <div className="hidden sm:grid sm:grid-cols-[7rem_1fr_auto_1fr_1fr_2rem] gap-2 px-1">
+            <div className="hidden sm:grid sm:grid-cols-[7rem_minmax(0,1fr)_auto_minmax(0,1fr)_minmax(0,1fr)_2rem] gap-2 px-1">
               {["Amount", "From", "", "To", "Result", ""].map((h, i) => (
                 <span key={i} className="text-xs text-muted-foreground">{h}</span>
               ))}
@@ -89,7 +89,7 @@ export function MultipleConverter({ currencies }: { currencies: Currency[] }) {
             <Separator />
 
             {rows.map((row) => (
-              <div key={row.id} className="grid grid-cols-1 sm:grid-cols-[7rem_1fr_auto_1fr_1fr_2rem] gap-2 items-center">
+              <div key={row.id} className="grid grid-cols-1 sm:grid-cols-[7rem_minmax(0,1fr)_auto_minmax(0,1fr)_minmax(0,1fr)_2rem] gap-2 items-center">
                 <Input
                   type="number"
                   min="0"
@@ -100,14 +100,18 @@ export function MultipleConverter({ currencies }: { currencies: Currency[] }) {
                   className="font-mono"
                   disabled={row.loading}
                 />
-                <CurrencySelect currencies={currencies} value={row.from} onChange={(v) => resetRow(row.id, { from: v })} disabled={row.loading} />
+                <div className="min-w-0">
+                  <CurrencySelect currencies={currencies} value={row.from} onChange={(v) => resetRow(row.id, { from: v })} disabled={row.loading} />
+                </div>
                 <span className="text-muted-foreground text-sm hidden sm:block">→</span>
-                <CurrencySelect currencies={currencies} value={row.to}   onChange={(v) => resetRow(row.id, { to: v })}   disabled={row.loading} />
+                <div className="min-w-0">
+                  <CurrencySelect currencies={currencies} value={row.to} onChange={(v) => resetRow(row.id, { to: v })} disabled={row.loading} />
+                </div>
 
-                <div className="relative">
+                <div className="relative min-w-0">
                   <Input
                     readOnly
-                    className="font-mono bg-muted font-bold"
+                    className="font-mono bg-muted"
                     value={
                       row.loading
                         ? ""
@@ -124,15 +128,17 @@ export function MultipleConverter({ currencies }: { currencies: Currency[] }) {
                   )}
                 </div>
 
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-9 w-8 text-muted-foreground hover:text-destructive"
-                  onClick={() => removeRow(row.id)}
-                  disabled={convertingAll}
-                >
-                  <Trash2 className="h-4 w-4" />
-                </Button>
+                <div className="flex justify-center shrink-0">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-9 w-8 text-muted-foreground hover:text-destructive"
+                    onClick={() => removeRow(row.id)}
+                    disabled={convertingAll}
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </div>
               </div>
             ))}
           </div>

@@ -33,7 +33,7 @@ const App = () => {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <header className="sticky top-0 z-10 border-b bg-card/80 backdrop-blur-sm">
-        <div className="mx-auto max-w-7xl py-3 flex items-center gap-3">
+        <div className="mx-auto max-w-7xl py-3 px-4 md:px-6 lg:px-4 flex items-center gap-3">
           <Globe className="h-5 w-5 text-primary shrink-0" />
           <div>
             <h1 className="text-sm font-semibold leading-none">Currency Dashboard</h1>
@@ -49,7 +49,7 @@ const App = () => {
         </div>
       </header>
 
-      <main className="mx-auto max-w-7xl py-6">
+      <main className="mx-auto max-w-7xl py-6 px-4 md:px-6 lg:px-4">
         {loading && <DashboardSkeleton />}
         {error && <ErrorState message={error} />}
 

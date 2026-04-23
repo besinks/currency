@@ -55,48 +55,40 @@ export function SingleConverter({ currencies, from, to, onFromChange, onToChange
 
       <CardContent className="space-y-4">
 
-        <div className="grid grid-cols-[1fr_auto_1fr] gap-x-2 gap-y-3">
+        <div className="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] gap-x-2 gap-y-3">
 
-          <div className="flex flex-col gap-3">
-            <div className="space-y-1.5">
-              <CurrencySelect currencies={currencies} value={from} onChange={handleFromChange} />
-            </div>
-            <div className="space-y-1.5">
-              <Input
-                id="amount"
-                type="number"
-                min="0"
-                step="any"
-                value={amount}
-                onChange={(e) => { setAmount(e.target.value); clearResult(); }}
-                placeholder="1.00"
-                className="font-mono"
-              />
-            </div>
+          <div className="flex flex-col gap-3 min-w-0">
+            <CurrencySelect currencies={currencies} value={from} onChange={handleFromChange} />
+            <Input
+              id="amount"
+              type="number"
+              min="0"
+              step="any"
+              value={amount}
+              onChange={(e) => { setAmount(e.target.value); clearResult(); }}
+              placeholder="1.00"
+              className="font-mono"
+            />
           </div>
 
-          <div className="flex items-center justify-center">
+          <div className="flex items-center justify-center shrink-0">
             <Button variant="ghost" size="icon" onClick={handleSwap} title="Swap currencies">
               <ArrowLeftRight className="h-4 w-4" />
             </Button>
           </div>
 
-          <div className="flex flex-col gap-3">
-            <div className="space-y-1.5">
-              <CurrencySelect currencies={currencies} value={to} onChange={handleToChange} />
-            </div>
-            <div className="space-y-1.5">
-              <Input
-                readOnly
-                value={
-                  grossResult !== null
-                    ? grossResult.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 4 })
-                    : ""
-                }
-                placeholder="0.00"
-                className="font-mono bg-muted"
-              />
-            </div>
+          <div className="flex flex-col gap-3 min-w-0">
+            <CurrencySelect currencies={currencies} value={to} onChange={handleToChange} />
+            <Input
+              readOnly
+              value={
+                grossResult !== null
+                  ? grossResult.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 4 })
+                  : ""
+              }
+              placeholder="0.00"
+              className="font-mono bg-muted"
+            />
           </div>
         </div>
 
