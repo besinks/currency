@@ -8,41 +8,40 @@ import { RatesChart } from "@/components/RatesChart";
 import { fetchCurrencies } from "@/services/frankfurter";
 import type { Currency, FavoritePair } from "@/types/currency";
 
-const FAVORITES_STORAGE_KEY = "currency-converter-favorites";
+const FAVORITES_KEY = "currency-favorites";
 
-function readFavoritesFromStorage(): FavoritePair[] {
+function loadFavorites(): FavoritePair[] {
   try {
-    return JSON.parse(localStorage.getItem(FAVORITES_STORAGE_KEY) ?? "[]");
+    return JSON.parse(localStorage.getItem(FAVORITES_KEY) ?? "[]");
   } catch {
     return [];
   }
 }
 
 const App = () => {
-  const [currencies, setCurrencies]               = useState<Currency[]>([]);
-  const [currenciesLoading, setCurrenciesLoading] = useState(true);
-  const [currenciesError, setCurrenciesError]     = useState<string | null>(null);
-  const [favorites, setFavorites] = useState<FavoritePair[]>(readFavoritesFromStorage);
+  const [currencies, setCurrencies]   = useState<Currency[]>([]);
+  const [loading, setLoading]         = useState(true);
+  const [error, setError]             = useState<string | null>(null);
+  const [favorites, setFavorites]     = useState<FavoritePair[]>(loadFavorites);
   const [converterFrom, setConverterFrom] = useState("USD");
-  const [converterTo,   setConverterTo]   = useState("EUR");
+  const [converterTo, setConverterTo]     = useState("EUR");
 
   useEffect(() => {
     fetchCurrencies()
       .then(setCurrencies)
-      .catch((err) => setCurrenciesError(err instanceof Error ? err.message : "Unknown error"))
-      .finally(() => setCurrenciesLoading(false));
+      .catch((err) => setError(err instanceof Error ? err.message : "Unknown error"))
+      .finally(() => setLoading(false));
   }, []);
 
   useEffect(() => {
-    localStorage.setItem(FAVORITES_STORAGE_KEY, JSON.stringify(favorites));
+    localStorage.setItem(FAVORITES_KEY, JSON.stringify(favorites));
   }, [favorites]);
 
   const saveFavorite = (from: string, to: string) => {
-    if (favorites.some((f) => f.from === from && f.to === to)) return;
-    setFavorites((prev) => [
-      { id: crypto.randomUUID(), from, to, addedAt: Date.now() },
-      ...prev,
-    ]);
+    const alreadySaved = favorites.some((f) => f.from === from && f.to === to);
+    if (alreadySaved) return;
+    const newFav: FavoritePair = { id: crypto.randomUUID(), from, to, addedAt: Date.now() };
+    setFavorites((prev) => [newFav, ...prev]);
   };
 
   const deleteFavorite = (id: string) =>
@@ -56,9 +55,8 @@ const App = () => {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-
       <header className="sticky top-0 z-10 border-b bg-card/80 backdrop-blur-sm">
-        <div className="mx-auto max-w-7xl  sm:px-6 py-3 flex items-center gap-3">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 py-3 flex items-center gap-3">
           <Globe className="h-5 w-5 text-primary shrink-0" />
           <div>
             <h1 className="text-sm font-semibold leading-none">Currency Dashboard</h1>
@@ -66,27 +64,27 @@ const App = () => {
               Live mid-market rates · Frankfurter API
             </p>
           </div>
-          {!currenciesLoading && !currenciesError && (
+          {!loading && !error && (
             <span className="ml-auto text-xs text-muted-foreground">
-              {currencies.length} currencies available
+              {currencies.length} currencies
             </span>
           )}
         </div>
       </header>
 
       <main className="mx-auto max-w-7xl px-2 sm:px-4 py-6">
-        {currenciesLoading && <DashboardSkeleton />}
-        {currenciesError   && <ErrorState message={currenciesError} />}
+        {loading && <DashboardSkeleton />}
+        {error && <ErrorState message={error} />}
 
-        {!currenciesLoading && !currenciesError && (
+        {!loading && !error && (
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 items-start">
-
+            {/* Left column — chart + batch converter */}
             <div className="lg:col-span-3 flex flex-col gap-6">
               <RatesChart currencies={currencies} />
-
               <MultipleConverter currencies={currencies} />
             </div>
 
+            {/* Right column — single converter + favorites */}
             <div className="lg:col-span-2 flex flex-col gap-6">
               <SingleConverter
                 currencies={currencies}
@@ -97,7 +95,6 @@ const App = () => {
                 favorites={favorites}
                 onSaveFavorite={saveFavorite}
               />
-
               <FavoritePairs
                 favorites={favorites}
                 currencies={currencies}
@@ -105,14 +102,12 @@ const App = () => {
                 onDelete={deleteFavorite}
               />
             </div>
-
           </div>
         )}
       </main>
     </div>
   );
 };
-
 
 function DashboardSkeleton() {
   return (

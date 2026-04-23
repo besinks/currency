@@ -35,9 +35,3 @@ export interface MultiRow {
   error: string | null;
   loading: boolean;
 }
-
-export interface PairStore {
-  pairs: MultiRow[];
-  addPair: (pair: MultiRow) => void;
-  removePair: (id: string) => void;
-}

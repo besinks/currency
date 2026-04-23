@@ -8,7 +8,6 @@ import type { Currency, FavoritePair } from "@/types/currency";
 interface FavoritePairsProps {
   favorites: FavoritePair[];
   currencies: Currency[];
-  /** Load a pair into the single converter and navigate to the Convert tab. */
   onLoad: (pair: { from: string; to: string }) => void;
   onDelete: (id: string) => void;
 }
