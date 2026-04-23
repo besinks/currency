@@ -57,8 +57,6 @@ export function MultipleConverter({ currencies }: { currencies: Currency[] }) {
     setConvertingAll(false);
   };
 
-  const hasResults = rows.some((r) => r.result !== null || r.error !== null);
-
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
@@ -106,20 +104,24 @@ export function MultipleConverter({ currencies }: { currencies: Currency[] }) {
                 <span className="text-muted-foreground text-sm hidden sm:block">→</span>
                 <CurrencySelect currencies={currencies} value={row.to}   onChange={(v) => resetRow(row.id, { to: v })}   disabled={row.loading} />
 
-                <div className="min-h-9 flex items-center">
-                  {row.loading && <span className="text-sm text-muted-foreground animate-pulse">Loading…</span>}
+                <div className="relative">
+                  <Input
+                    readOnly
+                    className="font-mono bg-muted"
+                    value={
+                      row.loading
+                        ? ""
+                        : row.result !== null && !row.error
+                          ? row.result.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 4 })
+                          : ""
+                    }
+                    placeholder={row.loading ? "Loading…" : "—"}
+                  />
                   {!row.loading && row.error && (
-                    <span className="flex items-center gap-1 text-destructive text-xs">
+                    <span className="absolute inset-0 flex items-center gap-1 px-3 text-destructive text-xs pointer-events-none">
                       <AlertCircle className="h-3.5 w-3.5 shrink-0" /> {row.error}
                     </span>
                   )}
-                  {!row.loading && row.result !== null && !row.error && (
-                    <span className="font-mono text-sm font-semibold">
-                      {row.result.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 4 })}{" "}
-                      <span className="font-normal text-muted-foreground">{row.to}</span>
-                    </span>
-                  )}
-                  {!row.loading && !hasResults && <span className="text-xs text-muted-foreground">—</span>}
                 </div>
 
                 <Button

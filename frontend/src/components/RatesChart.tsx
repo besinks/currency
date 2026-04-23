@@ -10,7 +10,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { fetchRangeSeries } from "@/services/frankfurter";
 import { getCurrencyCountryCode } from "@/lib/currency-flags";
 import { useChartStore } from "@/stores/chart-store";
-import { type RatesChartProps, type Currency, type ExchangeRate, type Period, type ChartConfig, PERIOD_DAYS } from "@/types/currency";
+import { type RatesChartProps, type ExchangeRate, type Period, type ChartConfig, PERIOD_DAYS } from "@/types/currency";
 
 const chartConfig: ChartConfig = {
   rate: { label: "Rate", color: "var(--chart-1)" },

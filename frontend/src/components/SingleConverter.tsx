@@ -2,12 +2,11 @@ import { useState } from "react";
 import { ArrowLeftRight, Star, RefreshCw, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CurrencySelect } from "@/components/CurrencySelect";
 import { ProviderFees } from "@/components/ProviderFees";
 import { fetchRate } from "@/services/frankfurter";
-import type { Currency, FavoritePair, SingleConverterProps } from "@/types/currency";
+import type { SingleConverterProps } from "@/types/currency";
 
 export function SingleConverter({ currencies, from, to, onFromChange, onToChange, favorites, onSaveFavorite }: SingleConverterProps) {
   const [amount, setAmount] = useState("1");

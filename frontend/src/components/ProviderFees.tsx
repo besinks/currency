@@ -44,7 +44,7 @@ export function ProviderFees({ amount, grossResult, from, to }: ProviderFeesProp
                 <TableCell className="font-medium">
                   <span>{provider.name}</span>
                   {isBest && (
-                    <Badge variant="secondary" className="ml-2 text-xs">
+                    <Badge variant="default" className="ml-2 text-xs">
                       Best deal
                     </Badge>
                   )}
