@@ -1,0 +1,11 @@
+{
+    "private": true,
+    "scripts": {
+        "dev": "bash ./dev.sh"
+    },
+    "dependencies": {
+        "country-flag-icons": "^1.6.16",
+        "recharts": "^3.8.1",
+        "zustand": "^5.0.12"
+    }
+}
