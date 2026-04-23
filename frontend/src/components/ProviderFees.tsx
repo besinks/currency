@@ -8,20 +8,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
+import type { ProviderFeesProps } from "@/types/currency";
 
-interface ProviderFeesProps {
-  /** Original amount in the source currency. */
-  amount: number;
-  /** Converted amount at the mid-market rate (before fees). */
-  grossResult: number;
-  from: string;
-  to: string;
-}
-
-/**
- * Shows what each provider would deliver after applying their fee to the
- * mid-market converted amount. Sorted best-to-worst (lowest fee first).
- */
 export function ProviderFees({ amount, grossResult, from, to }: ProviderFeesProps) {
   const sorted = [...PROVIDERS].sort((a, b) => a.feePercent - b.feePercent);
   const bestProvider = sorted[0];
@@ -48,8 +36,8 @@ export function ProviderFees({ amount, grossResult, from, to }: ProviderFeesProp
         <TableBody>
           {sorted.map((provider) => {
             const feeInSource = amount * (provider.feePercent / 100);
-            const netResult   = applyFee(grossResult, provider.feePercent);
-            const isBest      = provider.id === bestProvider.id;
+            const netResult = applyFee(grossResult, provider.feePercent);
+            const isBest = provider.id === bestProvider.id;
 
             return (
               <TableRow key={provider.id} className={isBest ? "bg-accent/40" : ""}>

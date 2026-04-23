@@ -10,12 +10,11 @@ import { useFavoritesStore } from "@/stores/favorites-store";
 import type { Currency } from "@/types/currency";
 
 const App = () => {
-  const [currencies, setCurrencies]       = useState<Currency[]>([]);
-  const [loading, setLoading]             = useState(true);
-  const [error, setError]                 = useState<string | null>(null);
-  const [converterFrom, setConverterFrom] = useState("USD");
-  const [converterTo, setConverterTo]     = useState("EUR");
-
+  const [currencies, setCurrencies] = useState<Currency[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [converterFrom, setConverterFrom] = useState("PHP");
+  const [converterTo, setConverterTo] = useState("USD");
   const { favorites, addFavorite, removeFavorite } = useFavoritesStore();
 
   useEffect(() => {
@@ -34,7 +33,7 @@ const App = () => {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <header className="sticky top-0 z-10 border-b bg-card/80 backdrop-blur-sm">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 py-3 flex items-center gap-3">
+        <div className="mx-auto max-w-7xl py-3 flex items-center gap-3">
           <Globe className="h-5 w-5 text-primary shrink-0" />
           <div>
             <h1 className="text-sm font-semibold leading-none">Currency Dashboard</h1>
@@ -50,19 +49,18 @@ const App = () => {
         </div>
       </header>
 
-      <main className="mx-auto max-w-7xl px-2 sm:px-4 py-6">
+      <main className="mx-auto max-w-7xl py-6">
         {loading && <DashboardSkeleton />}
         {error && <ErrorState message={error} />}
 
         {!loading && !error && (
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 items-start">
-            {/* Left column — chart + batch converter */}
+
             <div className="lg:col-span-3 flex flex-col gap-6">
               <RatesChart currencies={currencies} />
               <MultipleConverter currencies={currencies} />
             </div>
 
-            {/* Right column — single converter + favorites */}
             <div className="lg:col-span-2 flex flex-col gap-6">
               <SingleConverter
                 currencies={currencies}

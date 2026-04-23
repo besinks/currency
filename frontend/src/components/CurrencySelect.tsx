@@ -5,17 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { getCurrencyCountryCode } from "@/lib/currency-flags";
-import type { Currency } from "@/types/currency";
+import { type CurrencySelectProps } from "@/types/currency";
 
-interface CurrencySelectProps {
-  currencies: Currency[];
-  value: string;
-  onChange: (value: string) => void;
-  disabled?: boolean;
-  placeholder?: string;
-}
-
-/** Country flag icon for a currency code. Renders nothing if the code is unknown. */
 function CurrencyFlag({ code }: { code: string }) {
   const cc = getCurrencyCountryCode(code);
   if (!cc) return null;
@@ -28,12 +19,7 @@ function CurrencyFlag({ code }: { code: string }) {
     />
   );
 }
-
-/**
- * A searchable currency picker built on Popover + Input.
- * Supports filtering by ISO code or full currency name.
- * Shows a country flag beside each currency code.
- */
+  
 export function CurrencySelect({
   currencies,
   value,
@@ -41,19 +27,16 @@ export function CurrencySelect({
   disabled,
   placeholder = "Select currency",
 }: CurrencySelectProps) {
-  const [open, setOpen]     = useState(false);
+  const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
-  const inputRef            = useRef<HTMLInputElement>(null);
-
+  const inputRef = useRef<HTMLInputElement>(null);
   const selected = currencies.find((c) => c.iso_code === value);
-
   const filtered = currencies.filter(
     (c) =>
       c.iso_code.toLowerCase().includes(search.toLowerCase()) ||
       c.name.toLowerCase().includes(search.toLowerCase())
   );
 
-  // Auto-focus search field when popover opens; clear it when it closes.
   useEffect(() => {
     if (open) {
       setTimeout(() => inputRef.current?.focus(), 50);

@@ -2,15 +2,7 @@ import { Star, ArrowRight, Trash2, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
-import type { Currency, FavoritePair } from "@/types/currency";
-
-interface FavoritePairsProps {
-  favorites: FavoritePair[];
-  currencies: Currency[];
-  onLoad: (pair: { from: string; to: string }) => void;
-  onDelete: (id: string) => void;
-}
+import type { FavoritePairsProps } from "@/types/currency";
 
 export function FavoritePairs({ favorites, currencies, onLoad, onDelete }: FavoritePairsProps) {
   const getCurrencyName = (code: string) =>
@@ -25,9 +17,7 @@ export function FavoritePairs({ favorites, currencies, onLoad, onDelete }: Favor
           {favorites.length} {favorites.length === 1 ? "pair" : "pairs"}
         </Badge>
       </CardHeader>
-
-      <Separator />
-
+      
       <CardContent className="pt-4">
         {favorites.length === 0 ? (
           <div className="text-center py-14 space-y-2">
