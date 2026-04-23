@@ -1,14 +1,11 @@
 import { useState, useEffect, useCallback } from "react";
-import { TrendingUp, TrendingDown, RefreshCw, AlertCircle } from "lucide-react";
+import { RefreshCw, AlertCircle } from "lucide-react";
 import ReactCountryFlag from "react-country-flag";
 import { CartesianGrid, Line, LineChart, XAxis } from "recharts";
 import {
   Card,
   CardContent,
-  CardDescription,
-  CardFooter,
   CardHeader,
-  CardTitle,
 } from "@/components/ui/card";
 import {
   ChartContainer,
