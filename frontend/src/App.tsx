@@ -6,25 +6,17 @@ import { MultipleConverter } from "@/components/MultipleConverter";
 import { FavoritePairs } from "@/components/FavoritePairs";
 import { RatesChart } from "@/components/RatesChart";
 import { fetchCurrencies } from "@/services/frankfurter";
-import type { Currency, FavoritePair } from "@/types/currency";
-
-const FAVORITES_KEY = "currency-favorites";
-
-function loadFavorites(): FavoritePair[] {
-  try {
-    return JSON.parse(localStorage.getItem(FAVORITES_KEY) ?? "[]");
-  } catch {
-    return [];
-  }
-}
+import { useFavoritesStore } from "@/stores/favorites-store";
+import type { Currency } from "@/types/currency";
 
 const App = () => {
-  const [currencies, setCurrencies]   = useState<Currency[]>([]);
-  const [loading, setLoading]         = useState(true);
-  const [error, setError]             = useState<string | null>(null);
-  const [favorites, setFavorites]     = useState<FavoritePair[]>(loadFavorites);
+  const [currencies, setCurrencies]       = useState<Currency[]>([]);
+  const [loading, setLoading]             = useState(true);
+  const [error, setError]                 = useState<string | null>(null);
   const [converterFrom, setConverterFrom] = useState("USD");
   const [converterTo, setConverterTo]     = useState("EUR");
+
+  const { favorites, addFavorite, removeFavorite } = useFavoritesStore();
 
   useEffect(() => {
     fetchCurrencies()
@@ -32,20 +24,6 @@ const App = () => {
       .catch((err) => setError(err instanceof Error ? err.message : "Unknown error"))
       .finally(() => setLoading(false));
   }, []);
-
-  useEffect(() => {
-    localStorage.setItem(FAVORITES_KEY, JSON.stringify(favorites));
-  }, [favorites]);
-
-  const saveFavorite = (from: string, to: string) => {
-    const alreadySaved = favorites.some((f) => f.from === from && f.to === to);
-    if (alreadySaved) return;
-    const newFav: FavoritePair = { id: crypto.randomUUID(), from, to, addedAt: Date.now() };
-    setFavorites((prev) => [newFav, ...prev]);
-  };
-
-  const deleteFavorite = (id: string) =>
-    setFavorites((prev) => prev.filter((f) => f.id !== id));
 
   const loadFavoritePair = ({ from, to }: { from: string; to: string }) => {
     setConverterFrom(from);
@@ -93,13 +71,13 @@ const App = () => {
                 onFromChange={setConverterFrom}
                 onToChange={setConverterTo}
                 favorites={favorites}
-                onSaveFavorite={saveFavorite}
+                onSaveFavorite={addFavorite}
               />
               <FavoritePairs
                 favorites={favorites}
                 currencies={currencies}
                 onLoad={loadFavoritePair}
-                onDelete={deleteFavorite}
+                onDelete={removeFavorite}
               />
             </div>
           </div>
